@@ -1,0 +1,15 @@
+Package: flowBeads
+Version: 1.0
+Title: flowBeads: Analysis of flow bead data
+Author: Nikolas Pontikos
+Date: 2013-03-01
+Description: Provides S4 interface to bead flow data
+Maintainer: Nikolas Pontikos <n.pontikos@gmail.com>
+Depends: R (>= 2.10.0), methods, Biobase, rrcov
+Imports: flowCore, rrcov, cluster, knitr
+Suggests: flowViz
+Description: This package extends flowCore to provide functionality specific to bead data.
+License: Artistic-2.0
+biocViews: Infrastructure, Flowcytometry, CellBasedAssays
+Packaged: 
+InstallableEverywhere: yes

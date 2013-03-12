@@ -1,0 +1,17 @@
+import(flowCore)
+importFrom(rrcov, CovMcd)
+import(cluster)
+import(knitr)
+import(xtable)
+
+exportPattern("^[[:alpha:]]+")
+exportMethods(
+    "getDate",
+    "gateBeads",
+    "plot",
+    "generateReport"
+)
+exportClasses(
+    "BeadFlowFrame",
+     "GatedBeadFlowFrame" 
+)

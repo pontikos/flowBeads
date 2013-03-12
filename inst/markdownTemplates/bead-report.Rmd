@@ -1,0 +1,31 @@
+# `r bead.data@fcs.filename` #
+
+## Bead Stats ##
+```{r results='asis',echo=FALSE}
+    K <- dim(bead.data@beads.mef)[1]+1
+    for (p in names(bead.data@mef.transform)) {
+        d <- data.frame(bead.data@clustering.stats[,p, 1:K])
+        names(d) <- paste(p, 1:K)
+        print(xtable(d), type='html')
+     }
+``` 
+
+## Plot ##
+```{r plot, echo=FALSE, fig.path=paste(dirname(output.file), 'figures', gsub('.FCS','',toupper(basename(bead.data@fcs.filename))), sep='/')}
+    plot(bead.data)
+```
+
+## Regression Summary ##
+```{r results='asis',echo=FALSE}
+    print( xtable(bead.data@mef.transform$APC$m), type='html' )
+``` 
+
+## Flow Cytometer Settings ##
+```{r results='asis',echo=FALSE}
+    print( xtable(t(data.frame(bead.data@description)[1,])), type='html' )
+```
+
+
+
+
+
