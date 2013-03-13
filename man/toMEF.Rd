@@ -9,6 +9,6 @@
 }
 \description{
   Given bead.data and a flow.data apply the MEF transform
-  to matching channels in flow.data.
+  to matching channels in \code{flow.data}.
 }
 

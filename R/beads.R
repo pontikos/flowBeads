@@ -143,7 +143,7 @@ setMethod('absoluteNormalise',
 #' Relative normalise to align peaks of bead.data1 to those of bead.data2
 #' Returns a list of affine functions from transformed MFI day one coordinates to transformed MFI day two coordinates.
 #' This permits comparison of channels across two days, provided the detector is stable, even in the absence of absolute MEF values.
-#' @return A list of affine functions from transformed MFI day one coordinates to transformed MFI day two coordinates.
+#' @return A list of affine functions from MFI_1 day one coordinates to MFI_2 day two coordinates.
 #' @param bead.data1: \code{\link{GatedBeadFlowFrame}} object from day one
 #' @param bead.data2: \code{\link{GatedBeadFlowFrame}} object from day two
 #' @export

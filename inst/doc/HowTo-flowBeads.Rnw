@@ -297,7 +297,7 @@ The \Rcode{toMEF} function takes a \Rclass{GatedBeadFlowFrame} and a \Rclass{flo
 for which we have an MEF transform:
 
 <<toMEF, eval=FALSE>>=
-toMEF(bead.data, flow.data)
+toMEF(gbeads1, flow.data)
 @
 
 \section{Relative Normalisation}

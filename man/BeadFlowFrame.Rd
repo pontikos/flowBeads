@@ -17,8 +17,9 @@
   constructor
 }
 \section{Slots}{
-  \describe{ \item{\code{beads.mef:} \item{\code{trans}:}
-  \item{\code{inv.trans}:} }
+  \describe{ \item{\code{beads.mef:} lakdf
+  \item{\code{trans}:} aiodnf \item{\code{inv.trans}:}
+  adionf }
 }
 \keyword{beads}
 \keyword{flowcytometry}
