@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Rbuildignore
+flowBeads.Rproj
 
 *.pdf
 *~
