@@ -6,7 +6,7 @@
 flowBeads: Analysis of Bead data for Flow Cytometry
 }
 \description{
-    Provides additional functionality to the flowCore package to deal with normalisation beads in flow cytometry.
+    Provides additional functionality to the \code{\link{flowCore}} package to deal with normalisation beads in flow cytometry.
 }
 \details{
 \tabular{ll}{
@@ -29,6 +29,6 @@ Author and Maintainer: Nikolas Pontikos <n.pontikos@gmail.com>
 }
 \examples{
 library(flowBeads)
-b <- BeadFlowFrame(fcs.filename='~nikolas/CAD54_2008FEB11_TREG_6BEADS_110208.FCS')
-gb <- gateBeads(b, scatter.gate=T, gating.parameter='APC')
+b <- BeadFlowFrame(fcs.filename=system.file('extdata', 'beads1.fcs', package='flowBeads'))
+gb <- gateBeads(b)
 }

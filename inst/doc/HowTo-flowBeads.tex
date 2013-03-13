@@ -4,7 +4,7 @@
 %\VignettePackage{flowBeads}
 \documentclass[11pt]{article}
 
-\SweaveOpts{keep.source=TRUE,pdf=TRUE,eps=FALSE}
+
 
 
 \newcommand{\scscst}{\scriptscriptstyle}
@@ -40,7 +40,7 @@
 
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+\input{HowTo-flowBeads-concordance}
 \maketitle
 
 \begin{abstract}
@@ -54,9 +54,6 @@
 \end{abstract}
 
 
-<<loadPackage, echo=false,results=hide>>=
-library(flowBeads)
-@
 
 
 \section{Theory}
@@ -112,29 +109,43 @@ for the standard \textbf{LSRII} and \textbf{LSRFortessa} laser/detector setup,
 but any other type of bead can be supported provided the MEF configuration file is specified.
 \noindent
 And to load the Dakocytomation configuration file into the current workspace:
-<<<eval=F>>=
-data(dakomef)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(dakomef)
+\end{Sinput}
+\end{Schunk}
 
-<<MEF, echo=FALSE, results=tex>>=
-library(xtable)
-data(dakomef)
-print(xtable(dakomef,
-             caption=
-             "
+% latex table generated in R 2.14.2 by xtable 1.7-0 package
+% Wed Mar 13 01:06:55 2013
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrrrrr}
+  \hline
+ & FITC & PE & PE.CY5 & APC & PE.TEXAS.RED \\ 
+  \hline
+1 &  &  &  &  &  \\ 
+  2 & 2500 & 1500 & 750 & 4100 & 552 \\ 
+  3 & 6500 & 4400 & 2100 & 10300 & 2014 \\ 
+  4 & 19000 & 14500 & 6900 & 25500 & 6975 \\ 
+  5 & 55000 & 43800 & 22100 & 67300 & 20685 \\ 
+  6 & 150000 & 131200 & 77100 & 139100 & 71888 \\ 
+   \hline
+\end{tabular}
+\caption{
              FluoroSpheres from Dakocytomation.
              The Molecules of Equivalent Fluorochromes (MEF) values for the six bead populations as provided by the manufacturer
              for the LSRII.
              The first bead population are blank as they contain contain no flurochrome by design.
-             "
-             ))
-@
-
+             }
+\end{center}
+\end{table}
 \noindent
 To load the Cytocal configuration file into the current workspace:
-<<>>=
-data(cytocalmef)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(cytocalmef)
+\end{Sinput}
+\end{Schunk}
 
 Note that the underlying assumption in using beads as a reference is that the physical MEF property of these beads is more stable
 than the detected MFI of the bead population as reported by the instrument.
@@ -163,34 +174,83 @@ then the beads need to be run again to recompute the correct transform.
 Two example FCS 3 bead files, Dakocytomation beads ran on two different days, are included as part of the \Rpackage{flowBeads} package.
 These files may be loaded like so:
 
-<<loadBeads, eval=FALSE>>=
-beads1 <- BeadFlowFrame(fcs.filename=system.file('extdata', 'beads1.fcs', package='flowBeads'))
-beads2 <- BeadFlowFrame(fcs.filename=system.file('extdata', 'beads2.fcs', package='flowBeads'))
-@
+\begin{Schunk}
+\begin{Sinput}
+> beads1 <- BeadFlowFrame(fcs.filename=system.file('extdata', 'beads1.fcs', package='flowBeads'))
+> beads2 <- BeadFlowFrame(fcs.filename=system.file('extdata', 'beads2.fcs', package='flowBeads'))
+\end{Sinput}
+\end{Schunk}
 
 \noindent
 As no MEF configuration file has been specified as an argument to \Rcode{BeadFlowFrame}, they are assumed to be the default Dakocytomation beads.
 \Rcode{beads1} and \Rcode{beads2} are also saved as R objects as part of the \Rpackage{flowBeads} package and so can be loaded directly:
 
-<<fastLoadBeads>>=
-data(beads1)
-data(beads2)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(beads1)
+> data(beads2)
+\end{Sinput}
+\end{Schunk}
 
 \noindent
 %\Rclass{BeadFlowFrame} is an extension of \Rclass{flowFrame}.
 Here are a few ways of extracting information from \Rclass{BeadFlowFrame} objects:
 
-<<beads1>>=
-print(beads1)
-@
+\begin{Schunk}
+\begin{Sinput}
+> print(beads1)
+\end{Sinput}
+\begin{Soutput}
+BeadFlowFrame object '9de89faa-c6fe-4d82-ad9b-ae64a02c3122'
+from 2008-01-21
+with 5144 beads and 8 observables:
+            name desc  range minRange maxRange
+$P1          FSC <NA> 262144     0.00   262143
+$P2          SSC <NA> 262144     0.00   262143
+$P3    ALEXA.488 <NA> 262144   -82.08   262143
+$P4       PE.CY7 <NA> 262144   -87.78   262143
+$P5          APC <NA> 262144   -26.60   262143
+$P6           PE <NA> 262144  -111.00   262143
+$P7    ALEXA.700 <NA> 262144   -77.90   262143
+$P8 PACIFIC.BLUE <NA> 262144     0.00   262143
+146 keywords are stored in the 'description' slot
+Beads MEF
+    FITC    RPE RPE.CY5    APC PE.TEXAS.RED
+1   2500   1500     750   4100          552
+2   6500   4400    2100  10300         2014
+3  19000  14500    6900  25500         6975
+4  55000  43800   22100  67300        20685
+5 150000 131200   77100 139100        71888
+\end{Soutput}
+\end{Schunk}
 
-<<beads2>>=
-print(length(beads1))
-print(getDate(beads1))
-print(getParams(beads1))
-print(getMEFparams(beads1))
-@
+\begin{Schunk}
+\begin{Sinput}
+> print(length(beads1))
+\end{Sinput}
+\begin{Soutput}
+[1] 5144
+\end{Soutput}
+\begin{Sinput}
+> print(getDate(beads1))
+\end{Sinput}
+\begin{Soutput}
+[1] "2008-01-21"
+\end{Soutput}
+\begin{Sinput}
+> print(getParams(beads1))
+\end{Sinput}
+\begin{Soutput}
+[1] "ALEXA.488"    "PE.CY7"       "APC"          "PE"           "ALEXA.700"   
+[6] "PACIFIC.BLUE"
+\end{Soutput}
+\begin{Sinput}
+> print(getMEFparams(beads1))
+\end{Sinput}
+\begin{Soutput}
+[1] "FITC"         "RPE"          "RPE.CY5"      "APC"          "PE.TEXAS.RED"
+\end{Soutput}
+\end{Schunk}
 
 
 \noindent
@@ -211,38 +271,43 @@ All channels are gated with the number of expected clusters set to the number of
 (which is six in the case of Dakocytomation beads).
 The gating is done separately on each fluorescent channel using the \Rfunction{pam} function in the \Rpackage{cluster} \citep{rpackage:cluster} which is an implementation of the K-medoids algorithm:
 
-<<gateBeads, eval=F>>=
-gbeads1 <- gateBeads(beads1, verbose=T)
-gbeads2 <- gateBeads(beads2, verbose=F)
-@
+\begin{Schunk}
+\begin{Sinput}
+> gbeads1 <- gateBeads(beads1, verbose=T)
+> gbeads2 <- gateBeads(beads2, verbose=F)
+\end{Sinput}
+\end{Schunk}
 
 \noindent
 Note \Rfunction{gateBeads} is quite a slow function as the \Rfunction{pam} function is quite computationally intensive.
 \Rcode{gbeads1} and \Rcode{gbeads2} are \Rclass{GatedBeadFlowFrame} objects which contain the results of the gating.
 They can also be loaded directly as saved R objects:
 
-<<fastgateBeads>>=
-data(gbeads1)
-data(gbeads2)
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(gbeads1)
+> data(gbeads2)
+\end{Sinput}
+\end{Schunk}
 
 \noindent
 %The K-medoids algorithm computes a complete distance matrix which makes it quite
 To visualise the results of the gating (see Figure \ref{gbeads1plot} for \Robject{gbeads1} and Figure \ref{gbeads2plot} for \Robject{gbeads2}):
 
-<<gbeads1plot, fig=TRUE, include=FALSE, echo=TRUE, prefix=FALSE, height=8, width=8>>= 
-plot(gbeads1)
-@
+\begin{Schunk}
+\begin{Sinput}
+> plot(gbeads1)
+\end{Sinput}
+\end{Schunk}
 
-<<gbeads2plot, fig=TRUE, include=FALSE, echo=FALSE, prefix=FALSE, height=8, width=8>>= 
-plot(gbeads2)
-@
 
 \noindent
 Individual channels can be plotted like so:
-<<beadplotAPC, eval=F, fig=TRUE, include=FALSE, echo=TRUE, prefix=FALSE, height=4.5, width=8>>= 
-plot(gbeads1, 'APC')
-@
+\begin{Schunk}
+\begin{Sinput}
+> plot(gbeads1, 'APC')
+\end{Sinput}
+\end{Schunk}
 
 \noindent
 Clustering statistics are also calculated and stored in the \Robject{clustering.stats} slot as
@@ -252,53 +317,51 @@ channel (\texttt{ALEXA.488, PEC.Y7, APC, PE, ALEXA.700} and \texttt{PACIFIC.BLUE
 and bead population (one to six).
 For example, the clustering stats of bead population one (the blank beads):
 
-<<>>=
-gbeads1@clustering.stats[,,1]
-@
+\begin{Schunk}
+\begin{Sinput}
+> gbeads1@clustering.stats[,,1]
+\end{Sinput}
+\begin{Soutput}
+        ALEXA.488     PE.CY7       APC        PE ALEXA.700 PACIFIC.BLUE
+count   156.00000  359.00000 156.00000 156.00000 156.00000    156.00000
+mean.fi  14.30846  -11.04752 116.98397  11.06385  34.69327    171.85102
+sd.fi    33.59705   23.40036  58.69615  44.54962  60.68674     35.99458
+cv      234.80550 -211.81550  50.17452 402.65946 174.92368     20.94522
+\end{Soutput}
+\end{Schunk}
 
-<<echo=FALSE>>=
-beads1.mean.fi.APC <- gbeads1@clustering.stats['mean.fi','APC',]
-beads2.mean.fi.APC <- gbeads2@clustering.stats['mean.fi','APC',]
-@
 
 The \Rclass{GatedBeadFlowFrame} defines \Robject{mef.transform} slot which contains a list indexed by channel
 name, where each element is a list containing the transformation function to apply as well as the coefficients of the transform.
 As we do not have MEF values for all detector channels, we only define an MEF transform for ones with matching names in the bead configuration file (in this case APC).
 See Figure \ref{fig:absoluteNormalisation} for absolute normalisation of the APC channel.
 
-<<>>=
-mef.transform <- gbeads1@mef.transform
-names(mef.transform)
-names(mef.transform$APC)
-@
+\begin{Schunk}
+\begin{Sinput}
+> mef.transform <- gbeads1@mef.transform
+> names(mef.transform)
+\end{Sinput}
+\begin{Soutput}
+[1] "APC"
+\end{Soutput}
+\begin{Sinput}
+> names(mef.transform$APC)
+\end{Sinput}
+\begin{Soutput}
+[1] "alpha" "beta"  "m"     "rse"   "fun"  
+\end{Soutput}
+\end{Schunk}
 
-<<plotMEFrepeatability, fig=TRUE, include=FALSE, echo=FALSE, prefix=FALSE, height=5, width=10>>= 
-old.par <- par(no.readonly=T)
-par(mfrow=c(1,2))
-plot(beads1@trans(beads1.mean.fi.APC),
-     beads2@trans(beads2.mean.fi.APC),
-     xlim=c(0,5),
-     ylim=c(0,5),
-     xlab='APC MFI Beads Day 1',
-     ylab='APC MFI Beads Day 2')
-abline(b=1,a=0)
-plot(beads1@trans(gbeads1@mef.transform$APC$fun(beads1.mean.fi.APC)),
-     beads2@trans(gbeads2@mef.transform$APC$fun(beads2.mean.fi.APC)),
-     xlim=c(0,5),
-     ylim=c(0,5),
-     xlab='APC MEF Beads Day 1',
-     ylab='APC MEF Beads Day 2')
-abline(b=1,a=0)
-par(old.par)
-@
 
 \noindent
 The \Rcode{toMEF} function takes a \Rclass{GatedBeadFlowFrame} and a \Rclass{flowFrame} and normalises the channels
 for which we have an MEF transform:
 
-<<toMEF, eval=FALSE>>=
-toMEF(bead.data, flow.data)
-@
+\begin{Schunk}
+\begin{Sinput}
+> toMEF(bead.data, flow.data)
+\end{Sinput}
+\end{Schunk}
 
 \section{Relative Normalisation}
 
@@ -317,37 +380,26 @@ then the relative normalisation to compare samples from day one to day two is:
 
 \noindent
 To compute the transform:
-<<>>=
-relative.transforms <- relativeNormalise(gbeads1, gbeads2)
-names(relative.transforms)
-@
+\begin{Schunk}
+\begin{Sinput}
+> relative.transforms <- relativeNormalise(gbeads1, gbeads2)
+> names(relative.transforms)
+\end{Sinput}
+\begin{Soutput}
+[1] "ALEXA.488"    "PE.CY7"       "APC"          "PE"           "ALEXA.700"   
+[6] "PACIFIC.BLUE"
+\end{Soutput}
+\end{Schunk}
 We can then apply the transform, see Figure \ref{fig:relativeNormalisation} for result of applying relative normalisation to bead data.
-<<>>=
-fun <- relative.transforms$APC$fun
-mfi1 <- gbeads1@trans(gbeads1@clustering.stats['mean.fi','APC',])
-mfi2 <- gbeads2@trans(gbeads2@clustering.stats['mean.fi','APC',])
-fun.mfi1 <- fun(mfi1)
-@
+\begin{Schunk}
+\begin{Sinput}
+> fun <- relative.transforms$APC$fun
+> mfi1 <- gbeads1@trans(gbeads1@clustering.stats['mean.fi','APC',])
+> mfi2 <- gbeads2@trans(gbeads2@clustering.stats['mean.fi','APC',])
+> fun.mfi1 <- fun(mfi1)
+\end{Sinput}
+\end{Schunk}
 
-<<plotMFIrepeatability, fig=TRUE, include=FALSE, echo=FALSE, prefix=FALSE, height=5, width=10>>= 
-old.par <- par(no.readonly=T)
-par(mfrow=c(1,2))
-plot(mfi1,
-     mfi2,
-     xlim=c(0,5),
-     ylim=c(0,5),
-     xlab='APC MFI Beads Day 1',
-     ylab='APC MFI Beads Day 2')
-abline(b=1,a=0)
-plot(fun.mfi1,
-     mfi2,
-     xlim=c(0,5),
-     ylim=c(0,5),
-     xlab='APC MFI Beads Day 1 (Relative Normalisation)',
-     ylab='APC MFI Beads Day 2')
-abline(b=1,a=0)
-par(old.par)
-@
 
 \section{Generating a Report}
 
@@ -355,9 +407,11 @@ Once the bead data has been gated it is possible to generate an HTML report from
 These reports can then be viewed as web pages and linked to from a summary page which shows timeline data.
 This function is not strictly necessary as one may easily implement his own template.
 
-<<generateReport, eval=FALSE>>=
-generateReport(gbeads1, output.file='report.html')
-@
+\begin{Schunk}
+\begin{Sinput}
+> generateReport(gbeads1, output.file='report.html')
+\end{Sinput}
+\end{Schunk}
 
 
 %

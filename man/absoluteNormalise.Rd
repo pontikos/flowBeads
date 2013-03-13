@@ -1,11 +1,11 @@
-\docType{method}
+\docType{methods}
 \name{absoluteNormalise}
 \alias{absoluteNormalise}
 \title{absoluteNormalise}
 \arguments{
   \item{\code{bead.data}}{\link{GatedBeadFlowFrame}}
 
-  \item{mef.data}{\seealso{data.frame}}
+  \item{mef.data}{\link{data.frame}}
 }
 \description{
   Absolute normalise to align peaks of bead.data to MEF.

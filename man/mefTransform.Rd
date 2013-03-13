@@ -1,13 +1,16 @@
 \name{mefTransform}
 \alias{mefTransform}
-\title{Logicle transformation constructor
-Input parameters are to be provided in decades}
+\title{Logicle transformation constructor}
 \usage{
   mefTransform(transformationId = "mefTransform", alpha,
     beta)
 }
+\arguments{
+  \item{alpha}{}
+
+  \item{beta}{}
+}
 \description{
-  Logicle transformation constructor Input parameters are
-  to be provided in decades
+  Input parameters are to be provided in decades
 }
 

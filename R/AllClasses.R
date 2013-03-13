@@ -1,13 +1,17 @@
 #' BeadFlowFrame
 #'
-#' @description
+#' 
 #' Extension of \code{\link{flowFrame}} specific for bead data.
+#' 
+#' 
+#' @section Slots:
+#' \describe{
+#'  \item{\code{beads.mef:} lakdf
+#'  \item{\code{trans}:} aiodnf
+#'  \item{\code{inv.trans}:} adionf
+#'  }
+#' 
 #' @keywords beads flowcytometry
-#' @param fcs.filename
-#' @param bead.filename
-#' @param beads.mef
-#' @param trans
-#' @param inv.trans
 #' @export
 #' @docType class
 setClass(
@@ -28,6 +32,9 @@ setClass(
          )
 
 #' constructor
+#' 
+#' @param fcs.filename
+#' @param bead.filename
 BeadFlowFrame <- function(fcs.filename, bead.filename) {
     if (missing(bead.filename)) {
         data(package='flowBeads', dakomef)
@@ -64,6 +71,14 @@ BeadFlowFrame <- function(fcs.filename, bead.filename) {
 }
 
 
+#' GatedBeadFlowFrame
+#' 
+#' @param labels
+#' @param clustering
+#' @param clustering.stats
+#' @param mef.tranform
+#' @export
+#' @docType class
 setClass(
          "GatedBeadFlowFrame",
          contains='BeadFlowFrame',
@@ -76,7 +91,10 @@ setClass(
          )
 
 #' Logicle transformation constructor
+#' 
 #' Input parameters are to be provided in decades
+#' @param alpha
+#' @param beta
 mefTransform <- function(transformationId="mefTransform", alpha, beta) {
     k <- new("transform", .Data=function(x) x <- beta*x + alpha)            
     k@transformationId <- transformationId

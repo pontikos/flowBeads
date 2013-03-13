@@ -1,0 +1,35 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Dendrou et~al.(2009)Dendrou, Fung, Esposito, Todd, Wicker, and
+  Plagnol]{Dendrou:2009}
+Calliope~A Dendrou, Erik Fung, Laura Esposito, et~al.
+\newblock {Fluorescence Intensity Normalisation: Correcting for Time Effects in
+  Large-Scale Flow Cytometric Analysis}.
+\newblock \emph{Advances in Bioinformatics}, 2009:\penalty0 1--6, 2009.
+
+\bibitem[Ellis et~al.()Ellis, Haaland, Hahne, Meur, and
+  Gopalakrishnan]{rpackage:flowcore}
+B.~Ellis, P.~Haaland, F.~Hahne, N.~Le Meur, and N.~Gopalakrishnan.
+\newblock \emph{flowCore: flowCore: Basic structures for flow cytometry data}.
+\newblock R package version 1.20.0.
+
+\bibitem[Maechler et~al.(2012)Maechler, Rousseeuw, Struyf, Hubert, and
+  Hornik]{rpackage:cluster}
+Martin Maechler, Peter Rousseeuw, Anja Struyf, Mia Hubert, and Kurt Hornik.
+\newblock \emph{cluster: Cluster Analysis Basics and Extensions}, 2012.
+\newblock R package version 1.14.2 --- For new features, see the 'Changelog'
+  file (in the package source).
+
+\bibitem[Schwartz et~al.(1996)Schwartz, Repollet, Vogt, and
+  Gratama]{Schwartz:1996}
+A~Schwartz, EF~Repollet, R~Vogt, and JW~Gratama.
+\newblock {Standardizing flow cytometry: Construction of a standardized
+  fluorescence calibration plot using matching spectral calibrators}.
+\newblock \emph{Cytometry Part A}, 26\penalty0 (1):\penalty0 22--31, 1996.
+
+\end{thebibliography}

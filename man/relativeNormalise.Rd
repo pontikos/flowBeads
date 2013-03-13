@@ -1,10 +1,11 @@
+\docType{methods}
 \name{relativeNormalise}
 \alias{relativeNormalise}
 \title{relativeNormalise}
 \arguments{
-  \item{bead.data1}{}
+  \item{bead.data1}{\code{\link{GatedBeadFlowFrame}}}
 
-  \item{bead.data2}{}
+  \item{bead.data2}{\code{\link{GatedBeadFlowFrame}}}
 }
 \description{
   Relative normalise to align peaks of bead.data1 to those

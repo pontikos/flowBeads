@@ -87,11 +87,12 @@ setMethod('gateBeads',
 
 #' toMEF
 #' 
-#' Given bead.data and a flow.data apply the MEF transform to matching channels in flow.data.
+#' @description
+#' Given bead.data and a flow.data apply the MEF transform to matching channels in \code{flow.data}.
 #' @param bead.data
 #' @param flow.data
 #' @export
-#' @docType method
+#' @docType methods
 setMethod('toMEF',
           signature=signature(bead.data='GatedBeadFlowFrame', flow.data='flowFrame'),
           definition=function(bead.data, flow.data) {
@@ -112,11 +113,11 @@ setMethod('toMEF',
 #' 
 #' @description
 #' Absolute normalise to align peaks of bead.data to MEF.
-#' Returns a list of affine functions from transformed MFI relative coordinates to transformed MEF absolute coordinates.
-#' @param \code{bead.data} \link{GatedBeadFlowFrame}
-#' @param mef.data \seealso{data.frame}
+#' @return A list of affine functions from transformed MFI relative coordinates to transformed MEF absolute coordinates.
+#' @param \code{bead.data} \code{\link{GatedBeadFlowFrame}}
+#' @param mef.data \link{data.frame}
 #' @export
-#' @docType method
+#' @docType methods
 setMethod('absoluteNormalise',
           signature=signature(bead.data='GatedBeadFlowFrame', mef.data='data.frame'),
           definition=function(bead.data, mef.data) {
@@ -140,10 +141,13 @@ setMethod('absoluteNormalise',
 #' 
 #' @description
 #' Relative normalise to align peaks of bead.data1 to those of bead.data2
-#' Returns a list of affine functions from transformed MFI day 1 coordinates to transformed MFI day 2 coordinates.
+#' Returns a list of affine functions from transformed MFI day one coordinates to transformed MFI day two coordinates.
 #' This permits comparison of channels across two days, provided the detector is stable, even in the absence of absolute MEF values.
-#' @param bead.data1
-#' @param bead.data2
+#' @return A list of affine functions from transformed MFI day one coordinates to transformed MFI day two coordinates.
+#' @param bead.data1: \code{\link{GatedBeadFlowFrame}} object from day one
+#' @param bead.data2: \code{\link{GatedBeadFlowFrame}} object from day two
+#' @export
+#' @docType methods
 setMethod('relativeNormalise',
           signature=signature(bead.data1='GatedBeadFlowFrame', bead.data2='GatedBeadFlowFrame'),
           definition=function(bead.data1, bead.data2) {
@@ -166,9 +170,12 @@ setMethod('relativeNormalise',
 
 #' generateReport
 #' 
-#' Generate an html report from a Markdown template using knitr.
-#' @param bead.data
-#' @param output.file
+#' Generate an HTML report from a Markdown template using \link{knitr}.
+#' @seealso knitr
+#' @param bead.data \code{\link{GatedBeadFlowFrame}}
+#' @param output.file name of the file to which to output the HTML report.
+#' @export
+#' @docType methods
 setMethod('generateReport',
           signature=signature(bead.data='GatedBeadFlowFrame', output.file='character'),
           definition=function(bead.data, output.file, template=system.file("markdownTemplates/bead-report.Rmd", package = "flowBeads")) {

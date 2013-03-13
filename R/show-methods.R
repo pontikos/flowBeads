@@ -4,13 +4,10 @@
 ## ==========================================================================
 
 
-
-
-
-
-## ==========================================================================
-## BeadFlowFrame
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#' 
+#' BeadFlowFrame
+#' 
+#' @rdname show-methods
 setMethod("show",
           signature=signature(object="BeadFlowFrame"),
           definition=function(object)
@@ -30,9 +27,10 @@ setMethod("show",
       })
 
 
-## ==========================================================================
-## GatedBeadFlowFrame
-## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#'
+#' GatedBeadFlowFrame
+#'
+#'@rdname show-methods
 setMethod("show",
           signature=signature(object="GatedBeadFlowFrame"),
           definition=function(object)

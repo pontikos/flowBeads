@@ -1,4 +1,4 @@
-\docType{method}
+\docType{methods}
 \name{toMEF}
 \alias{toMEF}
 \title{toMEF}
