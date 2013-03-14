@@ -43,6 +43,7 @@
 \SweaveOpts{concordance=TRUE}
 \maketitle
 
+
 \begin{abstract}
     The \Rpackage{flowBeads} package is an extension of \Rpackage{flowCore} for bead data.
     It provides basic functionality for loading, gating and doing normalisation with bead data.
@@ -182,25 +183,25 @@ data(beads2)
 Here are a few ways of extracting information from \Rclass{BeadFlowFrame} objects:
 
 <<beads1>>=
-print(beads1)
+show(beads1)
 @
 
 <<beads2>>=
-print(length(beads1))
-print(getDate(beads1))
-print(getParams(beads1))
-print(getMEFparams(beads1))
+length(beads1)
+getDate(beads1)
+getParams(beads1)
+getMEFparams(beads1)
 @
 
 
 \noindent
-Once the bead files are loaded we can then gate them to identify the distinct populations and compute the MEF transform.
+Once the bead files are loaded we can gate them to identify the distinct populations and compute the MEF transform.
 
 
 \section{Gating Bead Data}
 
 %Beads are manufactured to the same size so provided clumping of beads is rare it is straightforward to identifiy the main population of singlet beads by gating on forward and side scatter.
-Gating of bead data is straightforward as the number of bead populations is known a priori.
+Gating of bead data is straightforward as the number of bead populations is speci MEF configuration file.
 In the forward and side scatter detector channels, a single population is expected since all beads are known to be of identical shape and size.
 Using the \Rfunction{norm2Filter} from \Rpackage{flowCore} \citep{rpackage:flowcore},
 we fit a bivariate Gaussian to the data.
@@ -264,12 +265,24 @@ beads2.mean.fi.APC <- gbeads2@clustering.stats['mean.fi','APC',]
 The \Rclass{GatedBeadFlowFrame} defines \Robject{mef.transform} slot which contains a list indexed by channel
 name, where each element is a list containing the transformation function to apply as well as the coefficients of the transform.
 As we do not have MEF values for all detector channels, we only define an MEF transform for ones with matching names in the bead configuration file (in this case APC).
-See Figure \ref{fig:absoluteNormalisation} for absolute normalisation of the APC channel.
+See Figure \ref{fig:absoluteNormalisation} for absolute normalisation of the APC channel for \Rcode{gbeads1} and \Rcode{gbeads2}.
 
 <<>>=
 mef.transform <- gbeads1@mef.transform
 names(mef.transform)
-names(mef.transform$APC)
+@
+
+\noindent
+Each MEF transform defines the parameters of the affine transform (\Robject{alpha} and \Robject{beta}):
+<<>>=
+mef.transform$APC$alpha
+mef.transform$APC$beta
+@
+
+\noindent
+As well as the transform itself (\Robject{fun}):
+<<>>=
+mef.transform$APC$fun
 @
 
 <<plotMEFrepeatability, fig=TRUE, include=FALSE, echo=FALSE, prefix=FALSE, height=5, width=10>>= 
@@ -294,7 +307,7 @@ par(old.par)
 
 \noindent
 The \Rcode{toMEF} function takes a \Rclass{GatedBeadFlowFrame} and a \Rclass{flowFrame} and normalises the channels
-for which we have an MEF transform:
+for which there is an MEF transform defined:
 
 <<toMEF, eval=FALSE>>=
 toMEF(gbeads1, flow.data)
@@ -303,7 +316,7 @@ toMEF(gbeads1, flow.data)
 \section{Relative Normalisation}
 
 The MEF provides an absolute reference but we can still normalise in the absence of MEF provided we can align the MFIs across days.
-An advantage of relative normalisation is that we can also align the blank bead population as we do not need the MEF.
+An advantage of relative normalisation is that we can also align the blank bead population as we do not require the MEF.
 Let $\text{MFI}_{1}$ be the MFI obtained from the beads on day one, and $\text{MFI}_{2}$ be the MFI obtained from the beads on day two,
 then the relative normalisation to compare samples from day one to day two is:
 
@@ -321,7 +334,7 @@ To compute the transform:
 relative.transforms <- relativeNormalise(gbeads1, gbeads2)
 names(relative.transforms)
 @
-We can then apply the transform, see Figure \ref{fig:relativeNormalisation} for result of applying relative normalisation to bead data.
+We can then apply the transform, see Figure \ref{fig:relativeNormalisation} for result of applying relative normalisation to \Rcode{gbeads1} and \Rcode{gbeads2}.
 <<>>=
 fun <- relative.transforms$APC$fun
 mfi1 <- gbeads1@trans(gbeads1@clustering.stats['mean.fi','APC',])
@@ -367,8 +380,9 @@ generateReport(gbeads1, output.file='report.html')
   \caption{
   \label{gbeads1plot}
   Plot of \Robject{gbeads1}.
-  APC gated beads day 1. We see tight clusters.
-  The channel for \texttt{PE.CY7} is not tuned to pick up the signal hence in the noise.
+  On each detector channel, six bead populations are clustered.
+  The MEF transform is only computed for APC since it is the only channel for which we have MEF values.
+  %The detector channel fnamed \texttt{PE.CY7} is not tuned to pick up the signal hence in the noise.
   }
 \end{figure}
 
@@ -379,9 +393,9 @@ generateReport(gbeads1, output.file='report.html')
   \caption{
   \label{gbeads2plot}
   Plot of \Robject{gbeads2}.
-  APC gated beads day 2 the $\alpha$ is higher than on day 1 which implies higher background.
-  The clusters are also far more noisy on this day than on the previous day.
-  The channel for \texttt{PE.CY7} is not tuned to pick up the signal hence in the noise.
+  The $\alpha$ for APC is higher than in Figure~\ref{gbeads1plot} which implies a higher background.
+  The bead populations on APC are aslo noisier which implies a poorer signal-to-noise ratio on the APC channel on this day.
+  %The channel for \texttt{PE.CY7} is not tuned to pick up the signal hence in the noise.
   }
 \end{figure}
 
@@ -392,7 +406,7 @@ generateReport(gbeads1, output.file='report.html')
   \caption{
   \label{fig:absoluteNormalisation}
   The result of the MEF transform is to align the MFI of the five (non-blank) bead populations across days.
-  Notice that that the alignment of the blank bead population is not perfect since it is not used in estimating the normalisation parameters.
+  Notice that that the alignment of the blank bead population is not perfect since it is not used in estimating the normalisation parameters ($\alpha$ and $\beta$).
   }
 \end{figure}
 
@@ -403,7 +417,7 @@ generateReport(gbeads1, output.file='report.html')
   \caption{
   \label{fig:relativeNormalisation}
   The result of the relative MFI transform is to align the MFI of the six bead populations across both days.
-  Note that after relative normalisation, the MFIs from all bead populations are perfectly aligned.
+  Note that after relative normalisation, the MFIs from all bead populations are perfectly aligned since they are all used in estimating the normalisation parameters.
   }
 \end{figure}
 
