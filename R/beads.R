@@ -24,7 +24,7 @@ setMethod('gateBeads',
         #gate on FSC SSC first to retrieve singlets
         if (verbose) cat('Gating on FSC and SSC with norm2Filter...\n')
         bead.data <- Subset(bead.data, filter(bead.data, flowCore::norm2Filter(filterId="ScatterFilter", x=c("FSC", "SSC"), scale.factor=1)))
-        K <- dim(bead.data@beads.mef)[1]+1
+        K <- dim(bead.data@beads.mef)[1]
         all.parameters <- dimnames(bead.data@exprs)[[2]]
         bead.parameters <- grep('^(SSC|FSC)', all.parameters, value=T, invert=T)
         gated.bead.data <- as(bead.data, 'GatedBeadFlowFrame')
@@ -143,9 +143,9 @@ setMethod('absoluteNormalise',
 #' Relative normalise to align peaks of bead.data1 to those of bead.data2
 #' Returns a list of affine functions from transformed MFI day one coordinates to transformed MFI day two coordinates.
 #' This permits comparison of channels across two days, provided the detector is stable, even in the absence of absolute MEF values.
-#' @return A list of affine functions from MFI_1 day one coordinates to MFI_2 day two coordinates.
-#' @param bead.data1: \code{\link{GatedBeadFlowFrame}} object from day one
-#' @param bead.data2: \code{\link{GatedBeadFlowFrame}} object from day two
+#' @return A list of affine functions from MFI day one coordinates to MFI day two coordinates.
+#' @param bead.data1: \code{\link{GatedBeadFlowFrame}} object with MFIs from day one
+#' @param bead.data2: \code{\link{GatedBeadFlowFrame}} object with MFIIs from day two
 #' @export
 #' @docType methods
 setMethod('relativeNormalise',
