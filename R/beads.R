@@ -1,3 +1,13 @@
+gateScatter <- function(bead.data, verbose=T, ...) {
+  #gating on scatter is important to eliminate doublets
+  #remove all negative SSC and FSC
+  if (verbose) cat('Removing all negative FSC and SSC...\n')
+  bead.data <- bead.data[ bead.data@exprs[,'FSC'] > 0 & bead.data@exprs[,'SSC'] > 0, ]
+  #gate on FSC SSC first to retrieve singlets
+  if (verbose) cat('Gating on FSC and SSC with norm2Filter...\n')
+  bead.data <- Subset(bead.data, filter(bead.data, flowCore::norm2Filter(filterId="ScatterFilter", x=c("FSC", "SSC"), scale.factor=1)))
+  return(bead.data)
+}
 
 #' gateBeads 
 #' 
@@ -17,13 +27,7 @@
 setMethod('gateBeads',
           signature=signature(bead.data='BeadFlowFrame'),
           definition=function(bead.data, verbose=F, ...) {
-        #gating on scatter is important to eliminate doublets
-        #remove all negative SSC and FSC
-        if (verbose) cat('Removing all negative FSC and SSC...\n')
-        bead.data <- bead.data[ bead.data@exprs[,'FSC'] > 0 & bead.data@exprs[,'SSC'] > 0, ]
-        #gate on FSC SSC first to retrieve singlets
-        if (verbose) cat('Gating on FSC and SSC with norm2Filter...\n')
-        bead.data <- Subset(bead.data, filter(bead.data, flowCore::norm2Filter(filterId="ScatterFilter", x=c("FSC", "SSC"), scale.factor=1)))
+        bead.data <- gateScatter(bead.data, verbose, ...)
         K <- dim(bead.data@beads.mef)[1]
         all.parameters <- dimnames(bead.data@exprs)[[2]]
         bead.parameters <- grep('^(SSC|FSC)', all.parameters, value=T, invert=T)
@@ -35,7 +39,7 @@ setMethod('gateBeads',
         gated.bead.data@clustering.stats <- array(dim=c(length(stats.fun),length(bead.parameters),K), dimnames=list(stats.fun,bead.parameters))
         #parameters which overlap between MEF file and bead.data
         trans <- bead.data@trans
-        inv.trans <- bead.data@inv.trans
+        inv.trans <- bead.data@inv.trans        
         for (gating.parameter in bead.parameters) {
             x <- bead.data@exprs[,gating.parameter]
             labels <- numeric(length(x))
@@ -82,6 +86,73 @@ setMethod('gateBeads',
         }
         return(gated.bead.data)
     } 
+)
+
+
+#' gateBeads 
+#' 
+#' @description
+#' \code{gateBeads} gates on all channels, apply scatter gate first.
+#' Find parameters in MEF data.frame which are also present in BeadFlowFrame
+#' Use k-medoids to identify bead populations, the number of bead populations
+#' expected depends on the type of beads
+#' @param \code{bead.data}
+#' @param \code{verbose}
+#' @return \link{GatedBeadFlowFrame}
+#' @export
+#' @docType methods
+#' @examples
+#' data(beads1)
+#' gateBeads(beads1, verbose=T)
+setMethod('gateBeads',
+          signature=signature(bead.data='BeadFlowFrame'),
+          definition=function(bead.data, verbose=F, ...) {
+            bead.data <- gateScatter(bead.data, verbose, ...)
+            K <- dim(bead.data@beads.mef)[1]
+            all.parameters <- dimnames(bead.data@exprs)[[2]]
+            bead.parameters <- grep('^(SSC|FSC)', all.parameters, value=T, invert=T)
+            gated.bead.data <- as(bead.data, 'GatedBeadFlowFrame')
+            #gating.parameter <- all.parameters[grep(gating.parameter, all.parameters, ignore.case=T)]
+            #for all parameters except forward and side scatter
+            gated.bead.data@clustering <- matrix(nrow=nrow(bead.data@exprs), ncol=length(bead.parameters), dimnames=list(NULL, bead.parameters))
+            #parameters which overlap between MEF file and bead.data
+            trans <- bead.data@trans
+            inv.trans <- bead.data@inv.trans
+            params <- getParams(bead.data)
+            p <- names(sort(abs(p$rotation[,1]), decreasing=T)[1:2])
+            res <- flowClust(bead.data, varNames=p, K=1:10)
+            labels <- Map(res)
+            K <- res@index            
+            stats.fun <- c('count', 'mean.fi', 'sd.fi', 'cv')
+            gated.bead.data@clustering.stats <- array(dim=c(length(stats.fun),length(bead.parameters),K), dimnames=list(stats.fun,bead.parameters))           
+            #sort the labels
+            labels <- factor(labels, levels=names(sort(tapply(x, labels, min))))
+            levels(labels) <- 1:K          
+            for (p in params) {
+              #store clustering results in a matrix of same dimension as exprs
+              gated.bead.data@clustering[,p] <- labels
+              #
+              gated.bead.data@clustering.stats['count',p,] <- as.numeric(tapply(x,labels, length))
+              gated.bead.data@clustering.stats['mean.fi',p,] <- as.numeric(tapply(x,labels, mean))
+              gated.bead.data@clustering.stats['sd.fi',p,] <- as.numeric(tapply(x,labels, sd))
+              gated.bead.data@clustering.stats['cv',p,] <- as.numeric(100*as.numeric(tapply(x,labels, sd))/as.numeric(tapply(x,labels, mean)))
+            }
+            
+            #we can compute the MEF transform for these
+            common.params <- intersect(bead.parameters, getMEFparams(bead.data))
+            if (verbose) cat('Common bead fluorochromes and channels:', common.params, '\n')
+            for (cp in common.params) {
+              mef <- bead.data@beads.mef[,cp]
+              mfi <- gated.bead.data@clustering.stats['mean.fi',cp,]
+              m <- lm( trans(mef) ~ trans(mfi[-1]) )
+              a <- as.numeric(round(m$coefficients[1], digits=3))
+              b <- as.numeric(round(m$coefficients[2], digits=3))
+              rse <- as.numeric(round(summary(m)$sigma, digits=3))
+              f <- function(a,b) {force(a); force(b); function(x) inv.trans(b*trans(x)+a)}
+              gated.bead.data@mef.transform[[cp]] <- list(alpha=a, beta=b, m=m, rse=rse, fun=f(a,b))
+            }
+            return(gated.bead.data)
+          } 
 )
 
 
