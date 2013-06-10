@@ -2,6 +2,9 @@
 #' Plot the results of the clustering.
 #' Plot only the requested channel
 #' which should have a corresponding entry in the MEF files
+#' 
+#' @rdname plot-methods
+#' @aliases plot,GatedBeadFlowFrame,character-method
 setMethod('plot',
     signature=signature(x='GatedBeadFlowFrame',y='character'),
     definition=function(x, y, ...) {
@@ -12,9 +15,8 @@ setMethod('plot',
 
         old.par <- par(no.readonly=T)
         par(mfrow=c(length(bead.parameters), 1), oma=c(0,0,4,0), mar=c(4,3,2,0), mgp=c(2, 1, 0))
-
+        labels <- bead.data@labels
         for (p in bead.parameters) {
-            labels <- bead.data@clustering[,p]
             x <- trans(bead.data@exprs[,p])
             mfi <- trans(bead.data@clustering.stats['mean.fi',p,])[-1]
             h <- hist(x, breaks=1000, plot=F)
@@ -24,7 +26,7 @@ setMethod('plot',
             xlab <- substitute(trans.name(p), list(trans.name=trans.name, p=p) )
             if (hasMEF(bead.data, p)) {
                 #mef draw histogram and regression line
-                mef <- trans(bead.data@beads.mef[,p])
+                mef <- trans(bead.data@beads.mef[-1,p])
                 ymax <- max(mef)+1
                 alpha <- bead.data@mef.transform[[p]][['alpha']]
                 beta <- bead.data@mef.transform[[p]][['beta']]
@@ -60,10 +62,14 @@ setMethod('plot',
     }
 )
 
+
+
 #'
 #' Ungated bead data, simply draw all channels individually (no colours).
 #'
 #'
+#' @rdname plot-methods
+#' @aliases plot,BeadFlowFrame,character-method
 setMethod('plot',
           signature=signature(x='BeadFlowFrame',y='character'),
           definition=function(x, y, ...) {
@@ -96,6 +102,9 @@ setMethod('plot',
 #'  Plot function for \code{BeadFlowFrame}
 #'
 #'  If no argument specified then plot all parameters
+#'
+#' @rdname plot-methods
+#' @aliases plot,BeadFlowFrame,missing-method
 setMethod('plot',
     signature=signature(x='BeadFlowFrame',y='missing'),
     definition=function(x, ...) {
