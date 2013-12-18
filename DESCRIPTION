@@ -10,6 +10,6 @@ Imports: flowCore, rrcov, cluster, knitr
 Suggests: flowViz
 Description: This package extends flowCore to provide functionality specific to bead data.
 License: Artistic-2.0
-biocViews: Infrastructure, Flowcytometry, CellBasedAssays
+biocViews: Infrastructure, FlowCytometry, CellBasedAssays
 Packaged: 
 InstallableEverywhere: yes
