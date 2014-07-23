@@ -45,7 +45,6 @@ setClass(
 #' @rdname BeadFlowFrame-class
 BeadFlowFrame <- function(fcs.filename, bead.filename) {
   #if no name is given will try to guess the number of bead populations
-  
     if (missing(bead.filename)) {
         #data(package='flowBeads', dakomef)
         #beads.mef <- dakomef
@@ -64,9 +63,11 @@ BeadFlowFrame <- function(fcs.filename, bead.filename) {
     if (flow.frame@description$FCSversion == '3') {
         trans <- logicleTransform()
         inv.trans <- inverseLogicleTransform(trans=trans)
-    } else if (flow.frame@description$FCSVersion == '2') {
-        trans <- new('transform', transformationId='Log[10]', .Data=function(x) log10(x))
-        inv.trans <- new('transform', transformationId='10^', .Data=function(x) 10**x)
+    } else if (flow.frame@description$FCSversion == '2') {
+        trans <- function (transformationId = "Log[10]") { k <- new('transform', .Data=function(x) x<-log10(x)); k@transformationId <- transformationId; k }
+        trans <- trans()
+        inv.trans <- function (transformationId = "10^") { k <- new('transform', .Data=function(x) x<-10**x); k@transformationId <- transformationId; k }
+        inv.trans <- inv.trans()
     }
     new(
         'BeadFlowFrame',
