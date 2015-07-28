@@ -62,7 +62,8 @@ rownames(trans) <- fluo.channels
 colnames(trans) <- c('a','b')
 ```
 
-Now trans contains the transform to compare samples analysed on the same day as beads2 with those analysed at the same time as beads1.  Note that the transforms are applied on the data after the ```logicleTransform``` so you can use the ```inverseLogicleTransform``` to get back the raw data after having applied the transform.
+Now trans contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
+Note that the transforms are applied on the data after the ```logicleTransform``` so you can use the ```inverseLogicleTransform``` to get back the raw data after having applied the transform.
 It might simpler to use a ```log10``` transform instead... more soon
 
 (to be continued...)

@@ -2,6 +2,7 @@
 # Author: Lucas Le Lann
 # Date: 20/05/2015
 # 
+setwd('lucas')
 
 ## loading packages ##
 suppressPackageStartupMessages(
