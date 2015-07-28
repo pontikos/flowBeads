@@ -66,7 +66,7 @@ colnames(trans) <- c('alpha','beta')
 normalisation <- lapply(fluo.channels , function(n) return(function(x) 10**trans[n,'alpha'] + x**trans[n,'beta']) )
 names(normalisation) <- fluo.channels
 ```
-Now normalisation contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
+Now ```normalisation``` contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
 So for example if ```x``` contains your data from day 2 then you can simply do this to normalise it to day 1:
 
 ```R
