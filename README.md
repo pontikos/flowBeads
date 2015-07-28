@@ -1,11 +1,12 @@
 flowBeads
 =========
 
-This is the public repository for the [Bioconductor package](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) for working with calibration beads in flow cytometry, based on flowCore package.
+This is the public repository for the [flowBeads](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) Bioconductor package for working with calibration beads in flow cytometry, based on the [flowCore](http://www.bioconductor.org/packages/release/bioc/html/flowCore.html) Bioconductor package.
 
-This package has received quite a lot of recent attention, in particular I have had a few questions about relative normalisation when no MEF is specified.
-I think it is possible provided that the number of peaks is consistent across samples.
-However I believe it easier to achieve this without using the package which can be quite rigid.
+This package has received some recent attention, in particular I have had a few questions about relative normalisation when the bead manufacturer does not specify the bead MEF.
+
+I think relative normalisation is possible provided that the number of peaks is consistent across samples.
+However I believe it is easier to achieve this without using the package which can be quite rigid and cumbersome.
 
 Here is some R code of how to go about it:
 
