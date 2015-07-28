@@ -58,14 +58,20 @@ MFI.beads2 <- get.MFI(beads2@exprs)
 Next it's simply a question of defining the linear transforms which maps the peaks between samples:
 
 ```R
-trans <-do.call('rbind', lapply( fluo.channels, function(chan) coefficients(lm(logicleTransform()(MFI.beads1[,chan])  ~ logicleTransform()(MFI.beads2[,chan]))) ) )
+trans <-do.call('rbind', lapply( fluo.channels, function(chan) coefficients(lm(log10(MFI.beads1[,chan])  ~ log10(MFI.beads2[,chan]))) ) )
 rownames(trans) <- fluo.channels
-colnames(trans) <- c('a','b')
+colnames(trans) <- c('alpha','beta')
+# if beta is not an integer, this normalisation is only defined for positive x
+# since beta is usually very close to 1 it may be worth just setting to 1
+normalisation <- lapply(fluo.channels , function(n) return(function(x) 10**trans[n,'alpha'] + x**trans[n,'beta']) )
+names(normalisation) <- fluo.channels
 ```
-Now trans contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
+Now normalisation contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
+So for example if ```x``` contains your data from day 2 then you can simply do this to normalise it to day 1:
 
-Note that the transforms are applied on the data after the ```logicleTransform``` so you can use the ```inverseLogicleTransform``` to get back the raw data after having applied the transform.
-It might simpler to use a ```log10``` transform instead... more soon
+```R
+  print( x.norm <- normalisation[["FITC-A"]](x) )
+```
 
 (to be continued...)
 
