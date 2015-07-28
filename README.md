@@ -37,7 +37,7 @@ get.MFI <- function(X) {
   #plotClustRes(pca.X,res=res,outliers=FALSE)
   X <- X[which(res@label==which.max(res@w)),]
   X.trans <- apply(X[,fluo.channels],2,logicleTransform())
-  res <- pam(X.trans[,1:8],8)
+  res <- pam(X.trans[,fluo.channels],8)
   #check results
   plotClusters(X.trans[,fluo.channels[1:4]],outliers=TRUE, classification=res$clustering,chulls=FALSE) 
   plotClusters(X.trans[,fluo.channels[4:8]],outliers=TRUE,classification=res$clustering,chulls=FALSE)
