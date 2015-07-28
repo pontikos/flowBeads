@@ -22,6 +22,7 @@ require(RCurl)
 download.file("https://raw.githubusercontent.com/pontikos/FCS/master/fcs.R", destfile = "fcs.R", method = "curl")
 source('fcs.R')
 ```
+This function will retrieve the MFIs of the 8 bead populations:
 
 ```R
 get.MFI <- function(X) {
@@ -54,15 +55,15 @@ MFI.beads1 <- get.MFI(beads1@exprs)
 MFI.beads2 <- get.MFI(beads2@exprs)
 ```
 
-Next it's simply a question of defining the linear transform which maps the peaks between samples and applying that transform to each channel.
+Next it's simply a question of defining the linear transforms which maps the peaks between samples:
 
 ```R
 trans <-do.call('rbind', lapply( fluo.channels, function(chan) coefficients(lm(logicleTransform()(MFI.beads1[,chan])  ~ logicleTransform()(MFI.beads2[,chan]))) ) )
 rownames(trans) <- fluo.channels
 colnames(trans) <- c('a','b')
 ```
-
 Now trans contains the transform to compare samples analysed on the same day as ```beads2``` with those analysed at the same time as ```beads1```.
+
 Note that the transforms are applied on the data after the ```logicleTransform``` so you can use the ```inverseLogicleTransform``` to get back the raw data after having applied the transform.
 It might simpler to use a ```log10``` transform instead... more soon
 
