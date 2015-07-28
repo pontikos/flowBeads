@@ -1,7 +1,7 @@
 flowBeads
 =========
 
-This is the public repository for the [flowBeads](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) Bioconductor package for working with calibration beads in flow cytometry, based on the [flowCore](http://www.bioconductor.org/packages/release/bioc/html/flowCore.html) Bioconductor package.
+This is the public repository for the [flowBeads](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) Bioconductor package for working with calibration beads in flow cytometry, based on [flowCore](http://www.bioconductor.org/packages/release/bioc/html/flowCore.html).
 
 This package has received some recent attention, in particular I have had a few questions about relative normalisation when the bead manufacturer does not specify the bead MEF.
 
