@@ -17,6 +17,9 @@ require(cluster)
 # This a very useful Bioconductor package to do clustering by fitting a mixture of normal distributions.
 # It also ignores outliers.
 require(flowClust)
+# This package provides the download.file function.
+# If download file doesn't work (returns status code 127) then you can just download the file and save it in the directory
+# where you run the script.
 require(RCurl)
 # This is another repository of mine containing some plotting functions for flow data.
 download.file("https://raw.githubusercontent.com/pontikos/FCS/master/fcs.R", destfile = "fcs.R", method = "curl")
@@ -32,9 +35,12 @@ get.MFI <- function(X) {
   pca <- princomp(X[,scatter.channels])
   pca.X <- pca$scores[,1:2]
   #smoothPlot(pca.X)
+  # This might not always be necessary depending.
+  # A good way of finding out is to plot the FSC-A against SSC-A.
   res <- flowClust(pca.X,K=4)
   #plot to check result
   #plotClustRes(pca.X,res=res,outliers=FALSE)
+  # Pick population which contains the most beads.
   X <- X[which(res@label==which.max(res@w)),]
   X.trans <- apply(X[,fluo.channels],2,logicleTransform())
   res <- pam(X.trans[,fluo.channels],8)
@@ -50,14 +56,15 @@ get.MFI <- function(X) {
  
 ```R
 beads1 <- flowCore::read.FCS(file.path("lucas","QC8PeaksBeads_ After Capture Beads_SAS_ARIAIII_CORDOBA_19112014.fcs"))
-beads2 <- flowCore::read.FCS(file.path("lucas","QC8PeaksBeads_32140219_SAS_ARIA_19MAR2015_19MAR2015.fcs"))
 MFI.beads1 <- get.MFI(beads1@exprs)
+beads2 <- flowCore::read.FCS(file.path("lucas","QC8PeaksBeads_32140219_SAS_ARIA_19MAR2015_19MAR2015.fcs"))
 MFI.beads2 <- get.MFI(beads2@exprs)
 ```
 
 Next it's simply a question of defining the linear transforms which maps the peaks between samples:
 
 ```R
+fluo.channels <- colnames(MFI.beads1)
 trans <-do.call('rbind', lapply( fluo.channels, function(chan) coefficients(lm(log10(MFI.beads1[,chan])  ~ log10(MFI.beads2[,chan]))) ) )
 rownames(trans) <- fluo.channels
 colnames(trans) <- c('alpha','beta')
