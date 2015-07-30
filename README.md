@@ -2,20 +2,21 @@ flowBeads
 =========
 
 This is the public repository for the [flowBeads](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) Bioconductor package for working with calibration beads in flow cytometry, based on [flowCore](http://www.bioconductor.org/packages/release/bioc/html/flowCore.html).
+```flowBeads``` can also make use of [flowClust](http://www.bioconductor.org/packages/release/bioc/html/flowClust.html) for clustering on forward and side scatter in order to filter doublets.
 
-This package has received some recent attention, in particular I have had a few questions about relative normalisation when the bead manufacturer does not specify the bead MEF.
+```flowBeads``` has received some recent attention, in particular I had a few questions about relative normalisation for channels in which the bead manufacturer does not specify the bead MEF.
 
-I think relative normalisation is possible provided that the number of peaks is consistent across samples.
-However I believe it is easier to achieve this without using the package which can be quite rigid and cumbersome.
+I think relative normalisation is possible, provided that the number of peaks is consistent across samples.
+However I believe it is easier to achieve this without using the Bioconductor package which can be quite rigid and cumbersome.
 
-Here is some R code of how to go about it:
+Instead, here is some R code of how to go about it:
 
 ```R
 require(flowCore)
-# We will use
+# We will use cluster for the pam function (implementation of k medoids).
 require(cluster)
-# This a very useful Bioconductor package to do clustering by fitting a mixture of normal distributions.
-# It also ignores outliers.
+# flowClust is a very useful Bioconductor package to do clustering by fitting a mixture of normal distributions.
+# It also ignores outliers from the clustering.
 require(flowClust)
 # This package provides the download.file function.
 # If download file doesn't work (returns status code 127) then you can just download the file and save it in the directory
