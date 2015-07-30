@@ -2,14 +2,14 @@ flowBeads
 =========
 
 This is the public repository for the [flowBeads](http://www.bioconductor.org/packages/release/bioc/html/flowBeads.html) Bioconductor package for working with calibration beads in flow cytometry, based on [flowCore](http://www.bioconductor.org/packages/release/bioc/html/flowCore.html).
-```flowBeads``` can also make use of [flowClust](http://www.bioconductor.org/packages/release/bioc/html/flowClust.html) for clustering on forward and side scatter in order to filter doublets.
 
 ```flowBeads``` has received some recent attention, in particular I had a few questions about relative normalisation for channels in which the bead manufacturer does not specify the bead MEF.
 
 I think relative normalisation is possible, provided that the number of peaks is consistent across samples.
 However I believe it is easier to achieve this without using the Bioconductor package which can be quite rigid and cumbersome.
 
-Instead, here is some R code of how to go about it:
+Instead, here is some R code of how to go about it, which also makes use of [flowClust](http://www.bioconductor.org/packages/release/bioc/html/flowClust.html) for clustering on forward and side scatter in order to filter doublets:
+
 
 ```R
 require(flowCore)
