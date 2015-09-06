@@ -84,6 +84,7 @@ So for example if ```x``` contains your data from day 2 then you can simply do t
   x.norm <- normalisation[[chan]](x)
   plot(density(logicleTransform()(x)))
   lines(density(logicleTransform()(x.norm)),col='red')
+  lines(density(logicleTransform()(beads1@exprs[,chan])),col='green')
 ```
 
 
