@@ -86,8 +86,28 @@ So for example if ```x``` contains your data from day 2 then you can simply do t
   lines(density(logicleTransform()(x.norm)),col='red')
   lines(density(logicleTransform()(beads1@exprs[,chan])),col='green')
 ```
+Ok so these curves don't align well.  Why?
+This is the regression on log10 scale:
 
+```R
+plot(log10(MFI.beads1[,chan])  ~ log10(MFI.beads2[,chan]))
+abline(lm(log10(MFI.beads1[, chan]) ~ log10(MFI.beads2[, chan])))
+```
+This is the regression on linear scale:
+```R
+plot((MFI.beads1[,chan])  ~ (MFI.beads2[,chan]))
+abline(lm((MFI.beads1[, chan]) ~ (MFI.beads2[, chan])))
+```
 
+```R
+  my.log10 <- function(x) ifelse(x<=0,0,log10(x))
+  chan <- 'APC-AF750-A'
+  x <- beads2@exprs[,chan]
+  x.norm <- normalisation[[chan]](x)
+  plot(density(my.log10(x)))
+  lines(density(my.log10(x.norm)),col='red')
+  lines(density(my.log10(beads1@exprs[,chan])),col='green')
+  ```
 
 (to be continued...)
 
